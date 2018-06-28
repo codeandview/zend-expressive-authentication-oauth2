@@ -21,17 +21,22 @@ class ClientEntity implements ClientEntityInterface
     use ClientTrait, EntityTrait, RevokableTrait, TimestampableTrait;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $secret;
 
     /**
-     * @var bool
+     * @var string
+     */
+    protected $userIdentifier;
+
+    /**
+     * @var bool|null
      */
     protected $personalAccessClient;
 
     /**
-     * @var bool
+     * @var bool|null
      */
     protected $passwordClient;
 
@@ -47,17 +52,28 @@ class ClientEntity implements ClientEntityInterface
     {
         $this->setIdentifier($identifier);
         $this->name = $name;
-        $this->redirectUri = explode(',', $redirectUri);
+        $uris = explode(',', $redirectUri);
+        $this->redirectUri = count($uris) == 1 ? $redirectUri : $uris;
     }
 
-    public function getSecret(): string
+    public function getSecret(): ?string
     {
         return $this->secret;
     }
 
-    public function setSecret(string $secret): void
+    public function setSecret(?string $secret): void
     {
         $this->secret = $secret;
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->userIdentifier;
+    }
+
+    public function setUserIdentifier(string $userIdentifier): void
+    {
+        $this->userIdentifier = $userIdentifier;
     }
 
     public function hasPersonalAccessClient(): bool
